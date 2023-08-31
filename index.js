@@ -10,6 +10,10 @@ const bot  = new TelegramBot(token, {
     polling: true
   })
 
+  bot.getMyCommands([
+    {command: "/start", description: "restart bot"}
+  ], { scope: {type: "default"}, language_code: "es"});
+
   bot.on("error", (e) => console.log(e ))
 const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b181cb4ff62d8c85bebe1958b.jpg'
 
@@ -42,7 +46,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
      )
 
 
-   await bot.sendMessage(chatId ,  `Assalomu aleykum ${msg.from.first_name} bizning botga hush kelisbsiz , Til Tanlang`,{
+   await bot.sendMessage(chatId ,  `Здравствуйте Мухаммадёсин ${msg.from.first_name} ,  добро пожаловать в наш бот. Выберите язык`,{
     reply_markup: {
         keyboard : [[ '🇷🇺  Русский', `🇺🇿 O'zbekcha`]],
         resize_keyboard : true
@@ -126,7 +130,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       }
     } 
     
-    if(msg.text == 'Нажмите кнопку "Отправить", чтобы подтвердить все данные' || msg.text  ==   'Barcha tafsilotlarni tasdiqlash uchun "Yuborish" tugmasini bosing'){
+    if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
         const findUser = await read('users.json').find(e=> e.id == msg.from.id)
         const sentData = await fetch('http://192.168.0.167:3445/api/v1/users/create' ,{
           method :'POST',
@@ -389,9 +393,11 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       ${findUser.lang == 'uz' ? '<b> 🗣 Rus tilini bilish darajasi?:</b>': '<b> 🗣 Уровень русского языка?:</b>' } ${findUser.lang_ru}
       ${findUser.lang == 'uz' ? '<b> 🗣O\'zbek tili darajasi:</b>': '<b> 🗣Уровень узбекского языка:</b>' } ${findUser.lang_uz}
       ${findUser.lang == 'uz' ? '<b> 🗣 Ingliz tilini bilish darajasi?:</b>': '<b> 🗣Уровень англиского языка:</b>' } ${mesage_Callback.data.split('::')[1]}
+      <br/>
+      ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun "Yuborish" tugmasini bosing`  : `Нажмите кнопку "Отправить", чтобы подтвердить все данные` }
       `,{parse_mode : 'HTML',
         reply_markup : {
-          keyboard : [[findUser.lang == 'uz' ? 'Barcha tafsilotlarni tasdiqlash uchun "Yuborish" tugmasini bosing' : 'Нажмите кнопку "Отправить", чтобы подтвердить все данные']],
+          keyboard : [[findUser.lang == 'uz' ? 'Yuborish' : 'Отправить']],
           one_time_keyboard :true,
           resize_keyboard:true
         }

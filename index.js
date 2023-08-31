@@ -128,7 +128,6 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     
     if(msg.text == 'Нажмите кнопку "Отправить", чтобы подтвердить все данные' || msg.text  ==   'Barcha tafsilotlarni tasdiqlash uchun "Yuborish" tugmasini bosing'){
         const findUser = await read('users.json').find(e=> e.id == msg.from.id)
-      console.log(findUser.name.toUpperCase());
         const sentData = await fetch('http://192.168.0.167:3445/api/v1/users/create' ,{
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,

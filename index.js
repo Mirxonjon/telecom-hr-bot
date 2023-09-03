@@ -393,7 +393,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       ${findUser.lang == 'uz' ? '<b> 🗣 Rus tilini bilish darajasi?:</b>': '<b> 🗣 Уровень русского языка?:</b>' } ${findUser.lang_ru}
       ${findUser.lang == 'uz' ? '<b> 🗣O\'zbek tili darajasi:</b>': '<b> 🗣Уровень узбекского языка:</b>' } ${findUser.lang_uz}
       ${findUser.lang == 'uz' ? '<b> 🗣 Ingliz tilini bilish darajasi?:</b>': '<b> 🗣Уровень англиского языка:</b>' } ${mesage_Callback.data.split('::')[1]}
-      <br/>
+      
       ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun "Yuborish" tugmasini bosing`  : `Нажмите кнопку "Отправить", чтобы подтвердить все данные` }
       `,{parse_mode : 'HTML',
         reply_markup : {

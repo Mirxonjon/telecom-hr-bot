@@ -1,28 +1,108 @@
 [
     {
         "id": 955105066,
-        "lang": "ru",
-        "name": "Nodir",
-        "wasborn": "12.03.22003",
-        "nomer": "+66656554554",
-        "address": "choraha",
-        "job": "CALL-CENTR",
-        "student": "✅ДА",
-        "lang_uz": "Продвинутый",
+        "lang": "uz",
+        "wasborn": "ismonov",
+        "nomer": "+998933843484]",
+        "address": "kkkk",
+        "job": "Qo'ng'iroq markazi mutaxassisi",
+        "student": "❌НЕТ",
+        "lang_uz": "Свободный",
         "lang_ru": "Свободный",
-        "lang_en": "Свободный"
+        "lang_en": "Свободный",
+        "name": "mirxonjon",
+        "comp": "Свободный"
     },
     {
         "id": 1038972116,
+        "lang": "uz",
+        "name": "s",
+        "wasborn": "s",
+        "nomer": "s",
+        "address": "s",
+        "job": "Qo'ng'iroq markazi mutaxassisi",
+        "student": "❌НЕТ",
+        "lang_uz": "Свободный",
+        "lang_ru": "Свободный",
+        "lang_en": "Свободный",
+        "comp": "Свободный"
+    },
+    {
+        "id": 592715148,
+        "lang": "ru"
+    },
+    {
+        "id": 628147312,
+        "lang": "uz",
+        "name": "Аброров Сардор Дониер угли",
+        "wasborn": "05.02.2000",
+        "nomer": "999999957",
+        "address": "Нукус 87",
+        "job": "Qo'ng'iroq markazi mutaxassisi",
+        "student": "❌НЕТ",
+        "lang_uz": "Начальный",
+        "lang_ru": "Начальный",
+        "lang_en": "Начальный"
+    },
+    {
+        "id": 783196350,
+        "lang": "ru"
+    },
+    {
+        "id": 195526268,
         "lang": "ru",
-        "name": "jk",
-        "wasborn": "j",
-        "nomer": "99999999999999999999999999999",
-        "address": "cfhn",
+        "name": "Тест",
+        "wasborn": "Тест",
+        "nomer": "Тест",
+        "address": "Тест",
+        "job": "CALL-CENTR",
+        "student": "❌НЕТ",
+        "lang_uz": "Средний",
+        "lang_ru": "Продвинутый",
+        "lang_en": "Средний"
+    },
+    {
+        "id": 1795748595,
+        "lang": "ru"
+    },
+    {
+        "id": 664651002,
+        "lang": "ru",
+        "name": "12222 2323 23 2",
+        "wasborn": "07.07.2007",
+        "nomer": "+998997777777",
+        "address": "ташкент",
         "job": "CALL-CENTR",
         "student": "❌НЕТ",
         "lang_uz": "Продвинутый",
         "lang_ru": "Продвинутый",
-        "lang_en": "Продвинутый"
+        "lang_en": "Средний"
+    },
+    {
+        "id": 287964627,
+        "lang": "ru",
+        "name": "Шермухамедова Шахноза Фарруховна",
+        "wasborn": "05.01.1993",
+        "nomer": "+998998885255",
+        "address": "Город Ташкент Мирабадский район Дашнобод 6/21",
+        "job": "CALL-CENTR",
+        "student": "❌НЕТ",
+        "lang_uz": "Продвинутый",
+        "lang_ru": "Продвинутый",
+        "lang_en": "Средний"
+    },
+    {
+        "id": 1772591765,
+        "lang": "uz",
+        "name": "Akmal",
+        "wasborn": "03",
+        "nomer": "Sbvs",
+        "address": "Hsvsv",
+        "job": "Qo'ng'iroq markazi mutaxassisi",
+        "student": "✅ДА",
+        "lang_uz": "Начальный",
+        "lang_ru": "Начальный",
+        "lang_en": "Начальный",
+        "comp": "Начальный"
     }
 ]

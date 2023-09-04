@@ -38,7 +38,8 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 <b>Удобства:</b>
 ✅ Официальная работа в офисе;
 ✅ Надбавки;
-✅ Дружественный коллектив;
+✅ дружелюбный коллектив;
+✅ Карьерный рост;
 📍 Адрес: г.Ташкент, Мирабадский р-он, ул.Нукус 87. Ориентир
 посольства России;
       `
@@ -46,7 +47,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
      )
 
 
-   await bot.sendMessage(chatId ,  `Здравствуйте Мухаммадёсин ${msg.from.first_name} ,  добро пожаловать в наш бот. Выберите язык`,{
+   await bot.sendMessage(chatId ,  `Здравствуйте  ${msg.from.first_name} ,  добро пожаловать в наш бот. Выберите язык`,{
     reply_markup: {
         keyboard : [[ '🇷🇺  Русский', `🇺🇿 O'zbekcha`]],
         resize_keyboard : true
@@ -70,7 +71,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           if(NewUser){
             bot.sendMessage( ChatId , '💼 Выберите интересующую Вас вакансию' ,{
               reply_markup:{
-                keyboard: [['Call-Центр' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish'] ],
+                keyboard: [['Оператор Call-центра' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish'] ],
                 resize_keyboard: true,
                 one_time_keyboard : true
               }
@@ -86,7 +87,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           if(NewUser){
             bot.sendMessage( ChatId , '💼 Выберите интересующую Вас вакансию' ,{
               reply_markup:{
-                keyboard: [['Call-Centr' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish']],
+                keyboard: [['Оператор Call-центра' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish']],
                 resize_keyboard: true,
                 one_time_keyboard : true
               }
@@ -106,7 +107,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
         await  bot.sendMessage( ChatId , '💼 Sizni qiziqtirgan vakansiyani tanlang' ,{
           reply_markup:{
-            keyboard: [[`Qo'ng'iroq markazi mutaxassisi` ,'🇷🇺/🇺🇿 Tilni o\'zgartirish']],
+            keyboard: [[`Aloqa markazi operatori` ,'🇷🇺/🇺🇿 Tilni o\'zgartirish']],
             resize_keyboard: true
           }
         })
@@ -122,7 +123,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
         await  bot.sendMessage( ChatId , '💼 Sizni qiziqtirgan vakansiyani tanlang' ,{
           reply_markup:{
-            keyboard: [[`Qo'ng'iroq markazi mutaxassisi`]],
+            keyboard: [[`Aloqa markazi operatori`]],
             resize_keyboard: true
           }
         })
@@ -132,7 +133,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     
     if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
         const findUser = await read('users.json').find(e=> e.id == msg.from.id)
-        const sentData = await fetch('http://192.168.0.167:3445/api/v1/users/create' ,{
+         await fetch('http://192.168.0.167:3445/api/v1/users/create' ,{
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,
           body: JSON.stringify({
@@ -145,12 +146,13 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
               "lang_ru": findUser.lang_ru,
               "lang_uz": findUser.lang_uz,
               "lang_en": findUser.lang_en,
+              "comp" : findUser.comp
           }),
         }).then(res => {
           if( res.status == 201) {
-            bot.sendMessage(msg.chat.id ,findUser.lang == 'uz' ? `Kompaniyamizga bo'lgan qiziqishingiz uchun tashakkur, siz anketangizni muvaffaqiyatli to'ldirdingiz` : `Благодарим за проявленный интерес нашей компании, Вы успешно заполнили свою анкету` ,{
+            bot.sendMessage(msg.chat.id ,findUser.lang == 'uz' ? `Kompaniyamizga bo'lgan qiziqishingiz uchun tashakkur, siz anketangizni muvaffaqiyatli to'ldirdingiz ✅` : `Благодарим за проявленный интерес нашей компании, Вы успешно заполнили свою анкету ✅` ,{
             reply_markup : {
-              keyboard:  findUser.lang == 'uz' ? [[`Qo'ng'iroq markazi mutaxassisi` ,'🇷🇺/🇺🇿 Tilni o\'zgartirish']] :[ ['Call-Центр' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish'] ],
+              keyboard:  findUser.lang == 'uz' ? [[`Aloqa markazi operatori` ,'🇷🇺/🇺🇿 Tilni o\'zgartirish']] :[ ['Оператор Call-центра' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish'] ],
               resize_keyboard: true ,
               one_time_keyboard :true
             }
@@ -175,7 +177,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     
       bot.on('message' , async msg =>  {
         const ChatId = msg.chat.id 
-        if(msg.text == 'Call-Центр' || msg.text == `Qo'ng'iroq markazi mutaxassisi`) {
+        if(msg.text == 'Оператор Call-центра' || msg.text == `Aloqa markazi operatori`) {
           const users = await read('users.json')
           const findUser = users.find(e => e.id == msg.from.id)
        
@@ -383,8 +385,46 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
       await write('users.json' , users)
 
+      await bot.sendMessage(mesage_Callback.message.chat.id,
+        findUser.lang == 'uz' ? `💻 Kompyuterni bilish darajangiz qanday?` :  '💻 Какой у вас уровень знания компьютера?', {
+        reply_markup:  {
+          inline_keyboard: [
+            [{
+                text: "Начальный",
+                callback_data: `comp::Начальный`
+              },
+              {
+                text: "Средний",
+                callback_data: `comp::Средний`
+              },
+            ],
+            [
+              {
+                text: "Продвинутый",
+                callback_data: `comp ::Продвинутый`
+              },
+              {
+                text: "Свободный",
+                callback_data: `comp::Свободный`
+              }
+            ]
+          ],
+          one_time_keyboard: true,
+          
+        },
+      })
+    }
+
+
+    if(mesage_Callback.data.split('::')[0] == 'comp'){
+      const users = await read('users.json')
+      const findUser = users.find(e => e.id == mesage_Callback.from.id)
+      findUser.comp =  mesage_Callback?.data?.split('::')[1]
+
+      await write('users.json' , users)
+
       bot.sendMessage(mesage_Callback.message.chat.id , `
-      ${findUser.lang == 'uz' ? '<b> 💼 Sizni qiziqtirgan vakansiyani tanlang?:</b>': '<b> 💼 На какую вакансию вы претендуете?:</b>' } ${findUser.job}
+      ${findUser.lang == 'uz' ? '<b> 💼 Sizni qiziqtirgan vakansiyani tanlang?:</b>': '<b> 💼 На какую вакансию вы прецендуете?:</b>' } ${findUser.job}
       ${findUser.lang == 'uz' ? '<b> To\'liq ismi sharif:</b>': '<b> ФИО:</b>' } ${findUser.name}
       ${findUser.lang == 'uz' ? '<b>📅 Tug\'ilgan sana:</b>': '<b> 📅 Дата рождения:</b>' } ${findUser.wasborn}
       ${findUser.lang == 'uz' ? '<b> 📱Aloqa:</b>': '<b> 📱Контакт:</b>' } ${findUser.nomer}
@@ -392,7 +432,8 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       ${findUser.lang == 'uz' ? '<b> Talaba yoki yo\'q: </b>': '<b> Студент или нет:</b>' } ${findUser.student}
       ${findUser.lang == 'uz' ? '<b> 🗣 Rus tilini bilish darajasi?:</b>': '<b> 🗣 Уровень русского языка?:</b>' } ${findUser.lang_ru}
       ${findUser.lang == 'uz' ? '<b> 🗣O\'zbek tili darajasi:</b>': '<b> 🗣Уровень узбекского языка:</b>' } ${findUser.lang_uz}
-      ${findUser.lang == 'uz' ? '<b> 🗣 Ingliz tilini bilish darajasi?:</b>': '<b> 🗣Уровень англиского языка:</b>' } ${mesage_Callback.data.split('::')[1]}
+      ${findUser.lang == 'uz' ? '<b> 🗣 Ingliz tilini bilish darajasi?:</b>': '<b> 🗣Уровень англиского языка:</b>' } ${findUser.lang_en}
+      ${findUser.lang == 'uz' ? '<b> 🗣 Kompyuterni bilish darajasi?:</b>': '<b> 💻Уровень знания компьютера:</b>' } ${mesage_Callback.data.split('::')[1]}
       
       ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun "Yuborish" tugmasini bosing`  : `Нажмите кнопку "Отправить", чтобы подтвердить все данные` }
       `,{parse_mode : 'HTML',

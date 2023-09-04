@@ -181,7 +181,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           const users = await read('users.json')
           const findUser = users.find(e => e.id == msg.from.id)
        
-          const dataLang = findUser?.lang
+          const dataLang = findUser.lang
           const sentName = await   bot.sendMessage( ChatId ,
             dataLang == 'uz' ?`👤 Toʻliq ismingizni kiriting (masalan: Ivanov Ivan Ivanovich)`: '👤Введите ФИО  (пример: Иванов Иван Иванович)' ,{
             reply_markup: {

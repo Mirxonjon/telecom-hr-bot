@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 const token = process.env.BOT_TOKEN 
+try {
 
 const bot  = new TelegramBot(token, {
     polling: true
@@ -452,3 +453,6 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
   
 
 
+} catch (error) {
+  console.log(error);
+}

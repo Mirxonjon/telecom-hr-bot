@@ -304,7 +304,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     if(mesage_Callback.data.split('::')[0] == 'lang_uz'){
       const users = await read('users.json')
       const findUser = users.find(e => e.id ==mesage_Callback.from.id)
-      findUser.lang_uz =  mesage_Callback?.data?.split('::')[1]
+      findUser.lang_uz =  mesage_Callback.data?.split('::')[1]
 
       await write('users.json' , users)
 

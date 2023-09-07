@@ -138,17 +138,17 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,
           body: JSON.stringify({
-              "id": `${findUser.id}` ,
-              "name": await findUser.name.toUpperCase(),
-              "was_born": findUser.wasborn,
-              "phone": findUser.nomer,
-              "address": findUser.address,
-              "student": findUser.student == '❌НЕТ' ? 'false' : 'true',
-              "lang_ru": findUser.lang_ru,
-              "lang_uz": findUser.lang_uz,
-              "lang_en": findUser.lang_en,
-              "comp" : findUser.comp,
-              "skills" : findUser.skills
+              "id": `${findUser?.id}` ,
+              "name": await findUser?.name.toUpperCase(),
+              "was_born": findUser?.wasborn,
+              "phone": findUser?.nomer,
+              "address": findUser?.address,
+              "student": findUser?.student == '❌НЕТ' ? 'false' : 'true',
+              "lang_ru": findUser?.lang_ru,
+              "lang_uz": findUser?.lang_uz,
+              "lang_en": findUser?.lang_en,
+              "comp" : findUser?.comp,
+              "skills" : findUser?.skills
           }),
         }).then(res => {
           if( res.status == 201) {
@@ -181,9 +181,9 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
         const ChatId = msg.chat.id 
         if(msg.text == 'Оператор Call-центра' || msg.text == `Aloqa markazi operatori`) {
           const users = await read('users.json')
-          const findUser = users.find(e => e.id == msg.from.id)
+          const findUser = users?.find(e => e.id == msg.from.id)
        
-          const dataLang = findUser.lang
+          const dataLang = findUser?.lang
           const sentName = await   bot.sendMessage( ChatId ,
             dataLang == 'uz' ?`👤 Toʻliq ismingizni kiriting (masalan: Mahmudov Alisher Baxodir o'g'li)`: '👤Введите ФИО  (пример: Иванов Иван Иванович)' ,{
             reply_markup: {

@@ -124,7 +124,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
         await  bot.sendMessage( ChatId , '💼 Sizni qiziqtirgan vakansiyani tanlang' ,{
           reply_markup:{
-            keyboard: [[`Aloqa markazi operatori`]],
+            keyboard: [[`Aloqa markazi operatori` , '🇷🇺/🇺🇿 Tilni o\'zgartirish']],
             resize_keyboard: true
           }
         })
@@ -139,7 +139,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           headers: { 'Content-Type': 'application/json' } ,
           body: JSON.stringify({
               "id": `${findUser?.id}` ,
-              "name": await findUser?.name.toUpperCase(),
+              "name": await findUser?.name?.toUpperCase(),
               "was_born": findUser?.wasborn,
               "phone": findUser?.nomer,
               "address": findUser?.address,
@@ -237,6 +237,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                         },
                       })
                       if(userStudent) {
+                        console.log(namee.text , date.text , nomer.text ,address.text );
                         findUser.name = namee.text
                         findUser.wasborn = date.text
                         findUser.nomer = nomer.text

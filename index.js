@@ -39,7 +39,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 <b>Удобства:</b>
 ✅ Официальная работа в офисе;
 ✅ Надбавки;
-✅ дружелюбный коллектив;
+✅ Дружелюбный коллектив;
 ✅ Карьерный рост;
 📍 Адрес: г.Ташкент, Мирабадский р-он, ул.Нукус 87. Ориентир
 посольства России;
@@ -48,7 +48,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
      )
 
 
-   await bot.sendMessage(chatId ,  `Здравствуйте  ${msg.from.first_name} ,  добро пожаловать в наш бот. Выберите язык`,{
+   await bot.sendMessage(chatId ,  `Здравствуйте  ${msg.from.first_name},  добро пожаловать в наш бот. Выберите язык 🇷🇺/🇺🇿`,{
     reply_markup: {
         keyboard : [[ '🇷🇺  Русский', `🇺🇿 O'zbekcha`]],
         resize_keyboard : true
@@ -134,7 +134,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     
     if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
         const findUser = await read('users.json').find(e=> e.id == msg.from.id)
-         await fetch('http://192.168.0.167:3445/api/v1/users/create' ,{
+         await fetch('https://api.ccenter.uz/api/v1/users/create' ,{
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,
           body: JSON.stringify({
@@ -147,7 +147,8 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
               "lang_ru": findUser.lang_ru,
               "lang_uz": findUser.lang_uz,
               "lang_en": findUser.lang_en,
-              "comp" : findUser.comp
+              "comp" : findUser.comp,
+              "skills" : findUser.skills
           }),
         }).then(res => {
           if( res.status == 201) {
@@ -184,7 +185,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
        
           const dataLang = findUser.lang
           const sentName = await   bot.sendMessage( ChatId ,
-            dataLang == 'uz' ?`👤 Toʻliq ismingizni kiriting (masalan: Ivanov Ivan Ivanovich)`: '👤Введите ФИО  (пример: Иванов Иван Иванович)' ,{
+            dataLang == 'uz' ?`👤 Toʻliq ismingizni kiriting (masalan: Mahmudov Alisher Baxodir o'g'li)`: '👤Введите ФИО  (пример: Иванов Иван Иванович)' ,{
             reply_markup: {
               force_reply : true
             }
@@ -193,7 +194,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
               bot.onReplyToMessage(sentName.chat.id, sentName.message_id, async namee => {
                 const userDate = await bot.sendMessage(sentName.chat.id,
-                  dataLang == 'uz' ?`📅 Tug'ilgan kuningizni kiriting (masalan, dd.MM.yyyy):` : '📅 Укажите дату своего рождения (пример, дд.мм.гггг):', {
+                  dataLang == 'uz' ?`📅 Tug'ilgan kuningizni kiriting (masalan, dd.mm.yyyy)` : '📅 Укажите дату своего рождения (пример: дд.мм.гггг)', {
                   reply_markup: {
                     force_reply: true
                   }
@@ -202,7 +203,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                 bot.onReplyToMessage(userDate.chat.id , userDate.message_id , async date => {
      
                   const userNomer =  await bot.sendMessage(namee.chat.id,
-                    dataLang == 'uz' ?`📱 Telefon raqamingizni kiriting (masalan: +998XXXXXXXXX):` : 'Укажите Ваш контактный номер телефона 📱  пример: +998XXXXXXXXX', {
+                    dataLang == 'uz' ?`📱 Telefon raqamingizni kiriting (masalan: +998XXXXXXXXX)` : '📱 Укажите Ваш контактный номер телефона (пример: +998XXXXXXXXX)', {
                         reply_markup: {
                           force_reply: true,
                         },
@@ -210,7 +211,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                     
                   bot.onReplyToMessage(userNomer.chat.id , userNomer.message_id , async nomer => {
                     const addressUser = await bot.sendMessage(nomer.chat.id ,
-                      dataLang == 'uz' ?`🏠 Yashash manzili (shahar, tuman, ko'cha/blok)` : '🏠 Адрес проживания (город, район, улица/квартал)' , {
+                      dataLang == 'uz' ?`🏠 Yashash manzili (shahar, tuman, ko'cha/blok)` : '🏠 Адрес проживания (пример: город, район, улица/квартал)' , {
                         reply_markup :{
                           force_reply :true
                         }
@@ -240,7 +241,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                         findUser.wasborn = date.text
                         findUser.nomer = nomer.text
                         findUser.address = address.text
-                        findUser.job = dataLang == 'uz' ? `Qo'ng'iroq markazi mutaxassisi` : 'CALL-CENTR'
+                        findUser.job = dataLang == 'uz' ? `Qo'ng'iroq markazi mutaxassisi` : 'Оператор Call-Центра'
   
                 
                         await write('users.json' , users)
@@ -257,6 +258,40 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
               })
       } 
+
+      if(msg.reply_to_message?.text == `📌 Напишите про дополнительных навыков.` || msg.reply_to_message?.text == `📌 Qo’shimcha qobiliyatlaringiz haqida yozing.`){
+
+        const users = await read('users.json')
+        const findUser = await users.find(e => e.id == msg.from.id) 
+        findUser.skills = msg.text  
+        await write('users.json' ,users)
+
+      bot.sendMessage(msg?.from?.id , `
+      ${findUser.lang == 'uz' ? `<b>Ma'lumotlaringizni oldindan ko'rish:</b>` : '<b> Предварительный просмотр ваших данных: </b>'}
+      
+ ${findUser.lang == 'uz' ? '<b>💼 Vakansiya nomi:</b>': '<b>💼 Название вакансии:</b>' } ${findUser.job}
+ ${findUser.lang == 'uz' ? '<b>📄 F.I.Sh:</b>': '<b>📄 Ф.И.О:</b>' } ${findUser.name}
+ ${findUser.lang == 'uz' ? '<b>📅 Tug\'ilgan sana:</b>': '<b> 📅 Дата рождения:</b>' } ${findUser.wasborn}
+ ${findUser.lang == 'uz' ? '<b>📱 Aloqa:</b>': '<b> 📱Контакт:</b>' } ${findUser.nomer}
+ ${findUser.lang == 'uz' ? '<b>📍 Manzil:</b>': '<b>📍 Адресс:</b>' } ${findUser.address}
+ ${findUser.lang == 'uz' ? '<b>🎓 Talabamisiz?: </b>': '<b>🎓 Вы студент?:</b>' } ${findUser.student}
+ ${findUser.lang == 'uz' ? '<b>🇺🇿 O\'zbek tili darajasi:</b>': '<b>🇺🇿 Уровень узбекского языка:</b>' } ${findUser.lang_uz}
+ ${findUser.lang == 'uz' ? '<b>🇷🇺 Rus tilini bilish darajasi:</b>': '<b>🇷🇺 Уровень русского языка:</b>' } ${findUser.lang_ru}
+ ${findUser.lang == 'uz' ? '<b>🇺🇸 Ingliz tilini bilish darajasi:</b>': '<b>🇺🇸 Уровень англиского языка:</b>' } ${findUser.lang_en}
+ ${findUser.lang == 'uz' ? '<b>💻 Kompyuterni bilish darajasi:</b>': '<b>💻Уровень знания компьютера:</b>' } ${findUser.comp}
+ ${findUser.lang == 'uz' ? '<b>📌 Qo’shimcha qobiliyatlar:</b>': '<b>📌 Дополнительные навыки:</b>' } ${msg.text}
+
+${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</b> tugmasini bosing`  : `Нажмите кнопку <b>"Отправить"</b>, чтобы подтвердить все данные` }
+      `,{parse_mode : 'HTML',
+        reply_markup : {
+          keyboard : [[findUser.lang == 'uz' ? 'Yuborish' : 'Отправить']],
+          one_time_keyboard :true,
+          resize_keyboard:true
+        }
+      }
+      )
+
+      }
     
     })
 
@@ -376,7 +411,6 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
         },
       })
 
-
     }
 
     if(mesage_Callback.data.split('::')[0] == 'lang_en'){
@@ -424,35 +458,16 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
       await write('users.json' , users)
 
-      bot.sendMessage(mesage_Callback.message.chat.id , `
-      ${findUser.lang == 'uz' ? '<b> 💼 Sizni qiziqtirgan vakansiyani tanlang?:</b>': '<b> 💼 На какую вакансию вы прецендуете?:</b>' } ${findUser.job}
-      ${findUser.lang == 'uz' ? '<b> To\'liq ismi sharif:</b>': '<b> ФИО:</b>' } ${findUser.name}
-      ${findUser.lang == 'uz' ? '<b>📅 Tug\'ilgan sana:</b>': '<b> 📅 Дата рождения:</b>' } ${findUser.wasborn}
-      ${findUser.lang == 'uz' ? '<b> 📱Aloqa:</b>': '<b> 📱Контакт:</b>' } ${findUser.nomer}
-      ${findUser.lang == 'uz' ? '<b> Manzil:</b>': '<b>  Аддресс:</b>' } ${findUser.address}
-      ${findUser.lang == 'uz' ? '<b> Talaba yoki yo\'q: </b>': '<b> Студент или нет:</b>' } ${findUser.student}
-      ${findUser.lang == 'uz' ? '<b> 🗣 Rus tilini bilish darajasi?:</b>': '<b> 🗣 Уровень русского языка?:</b>' } ${findUser.lang_ru}
-      ${findUser.lang == 'uz' ? '<b> 🗣O\'zbek tili darajasi:</b>': '<b> 🗣Уровень узбекского языка:</b>' } ${findUser.lang_uz}
-      ${findUser.lang == 'uz' ? '<b> 🗣 Ingliz tilini bilish darajasi?:</b>': '<b> 🗣Уровень англиского языка:</b>' } ${findUser.lang_en}
-      ${findUser.lang == 'uz' ? '<b> 🗣 Kompyuterni bilish darajasi?:</b>': '<b> 💻Уровень знания компьютера:</b>' } ${mesage_Callback.data.split('::')[1]}
-      
-      ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun "Yuborish" tugmasini bosing`  : `Нажмите кнопку "Отправить", чтобы подтвердить все данные` }
-      `,{parse_mode : 'HTML',
-        reply_markup : {
-          keyboard : [[findUser.lang == 'uz' ? 'Yuborish' : 'Отправить']],
-          one_time_keyboard :true,
-          resize_keyboard:true
+      bot.sendMessage(mesage_Callback.message.chat.id , findUser.lang == 'uz' ? `📌 Qo’shimcha qobiliyatlaringiz haqida yozing.`: `📌 Напишите про дополнительных навыков.`, {
+        reply_markup :{
+          force_reply : true
         }
-      }
-      )
+      } )
+
     }
-    
     
   })
   
-  
-
-
 } catch (error) {
   console.log(error);
 }

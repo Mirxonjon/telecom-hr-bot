@@ -59,13 +59,14 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
     bot.on('message' , async msg => {
       const ChatId = msg.chat.id 
+      console.log(ChatId);
 
       if(msg.text == '🇷🇺  Русский' ) {
         const findUser =await JSON.parse( await client.get(`${ChatId}`))
 
         if(findUser){
 
-          const UpdateUser  = await client.setEx(`${ChatId}`,3600, JSON.stringify({
+          const UpdateUser  = await client.set(`${ChatId}`, JSON.stringify({
             ...findUser,
             lang: 'ru'
           }))
@@ -82,7 +83,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           }
         } else {
           
-         const NewUser  = await client.setEx(`${ChatId}`,3000, JSON.stringify({
+         const NewUser  = await client.set(`${ChatId}`, JSON.stringify({
             id: msg.from.id,
             lang: 'ru'
           }))
@@ -105,9 +106,9 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
       if(findUser){
 
-        const UpdateUser  = await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        const UpdateUser  = await client.set(`${ChatId}`, JSON.stringify({
           ...findUser,
-          lang: 'ru'
+          lang: 'uz'
         }))
       if(UpdateUser) {
 
@@ -121,9 +122,9 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
         
       } else {
 
-        const NewUser  = await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        const NewUser  = await client.set(`${ChatId}`, JSON.stringify({
           id: msg.from.id,
-          lang: 'ru'
+          lang: 'uz'
         }))
       if(NewUser) {
 
@@ -191,7 +192,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           const findUser = await JSON.parse( await client.get(`${ChatId}`))
 
        
-          const dataLang = findUser?.lang
+          const dataLang = await findUser?.lang
           const sentName = await   bot.sendMessage( ChatId ,
             dataLang == 'uz' ?`👤 Toʻliq ismingizni kiriting (masalan: Mahmudov Alisher Baxodir o'g'li)`: '👤Введите ФИО  (пример: Иванов Иван Иванович)' ,{
             reply_markup: {
@@ -247,7 +248,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                       if(userStudent) {
 
 
-                         await client.setEx(`${ChatId}`,3000, JSON.stringify({
+                         await client.set(`${ChatId}`, JSON.stringify({
                           ...findUser,
                           name : namee.text,
                           wasborn : date.text,
@@ -274,7 +275,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
-        await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        await client.set(`${ChatId}`, JSON.stringify({
           ...findUser,
           skills : msg.text
         }))
@@ -314,7 +315,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
       const findUser =await JSON.parse( await client.get(`${ChatId}`))
      
-      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+      await client.set(`${ChatId}`, JSON.stringify({
         ...findUser,
        student :  mesage_Callback.data.split('::')[1]
       }))
@@ -356,7 +357,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
-      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+      await client.set(`${ChatId}`, JSON.stringify({
         ...findUser,
         lang_uz :  mesage_Callback.data.split('::')[1]
       }))
@@ -398,7 +399,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
-      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+      await client.set(`${ChatId}`, JSON.stringify({
         ...findUser,
         lang_ru :  mesage_Callback.data.split('::')[1]
       }))
@@ -439,7 +440,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
-      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+      await client.set(`${ChatId}`, JSON.stringify({
         ...findUser,
         lang_en :  mesage_Callback.data.split('::')[1]
       }))
@@ -479,7 +480,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
-      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+      await client.set(`${ChatId}`, JSON.stringify({
         ...findUser,
         comp :  mesage_Callback.data.split('::')[1]
       }))

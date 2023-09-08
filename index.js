@@ -460,7 +460,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
             [
               {
                 text: "Продвинутый",
-                callback_data: `comp ::Продвинутый`
+                callback_data: `comp::Продвинутый`
               },
               {
                 text: "Свободный",

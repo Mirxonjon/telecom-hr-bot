@@ -1,11 +1,12 @@
 import TelegramBot from 'node-telegram-bot-api';
 import fetch from 'node-fetch'
-import { read, write } from './utils/FS.js';
 import * as dotenv from 'dotenv'
+import { fetchRedis } from './utils/redis.js';
 
 dotenv.config()
 const token = process.env.BOT_TOKEN 
 try {
+const client = await fetchRedis()
 
 const bot  = new TelegramBot(token, {
     polling: true
@@ -60,16 +61,16 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       const ChatId = msg.chat.id 
 
       if(msg.text == '🇷🇺  Русский' ) {
-
-        const users = await read('users.json')
-
-        const findUser = await users.find(e => e.id == msg.from.id)
-
+        const findUser =await JSON.parse( await client.get(`${ChatId}`))
 
         if(findUser){
-          findUser.lang = 'ru' || findUser.lang
-          const NewUser = await write('users.json' , users)
-          if(NewUser){
+
+          const UpdateUser  = await client.setEx(`${ChatId}`,3600, JSON.stringify({
+            ...findUser,
+            lang: 'ru'
+          }))
+
+          if(UpdateUser){
             bot.sendMessage( ChatId , '💼 Выберите интересующую Вас вакансию' ,{
               reply_markup:{
                 keyboard: [['Оператор Call-центра' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish'] ],
@@ -79,12 +80,12 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
             })
     
           }
-        } else {  
-          users.push({
+        } else {
+          
+         const NewUser  = await client.setEx(`${ChatId}`,3000, JSON.stringify({
             id: msg.from.id,
             lang: 'ru'
-          })
-          const NewUser = await write('users.json' , users)
+          }))
           if(NewUser){
             bot.sendMessage( ChatId , '💼 Выберите интересующую Вас вакансию' ,{
               reply_markup:{
@@ -99,12 +100,16 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
      }
 
     if(msg.text == `🇺🇿 O'zbekcha` ) {
-      const users = await read('users.json')
-      const findUser = users.find(e => e.id == msg.from.id)
+
+      const findUser = await JSON.parse( await client.get(`${ChatId}`))
+
       if(findUser){
-        findUser.lang = 'uz' || findUser.lang
-        const NewUser = await write('users.json' , users)
-      if(NewUser) {
+
+        const UpdateUser  = await client.setEx(`${ChatId}`,3000, JSON.stringify({
+          ...findUser,
+          lang: 'ru'
+        }))
+      if(UpdateUser) {
 
         await  bot.sendMessage( ChatId , '💼 Sizni qiziqtirgan vakansiyani tanlang' ,{
           reply_markup:{
@@ -115,11 +120,11 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       }
         
       } else {
-        users.push({
+
+        const NewUser  = await client.setEx(`${ChatId}`,3000, JSON.stringify({
           id: msg.from.id,
-          lang: 'uz'
-        })
-        const NewUser = await write('users.json' , users)
+          lang: 'ru'
+        }))
       if(NewUser) {
 
         await  bot.sendMessage( ChatId , '💼 Sizni qiziqtirgan vakansiyani tanlang' ,{
@@ -133,7 +138,9 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     } 
     
     if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
-        const findUser = await read('users.json').find(e=> e.id == msg.from.id)
+
+        const findUser = await JSON.parse( await client.get(`${ChatId}`))
+        
          await fetch('https://api.ccenter.uz/api/v1/users/create' ,{
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,
@@ -180,8 +187,9 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       bot.on('message' , async msg =>  {
         const ChatId = msg.chat.id 
         if(msg.text == 'Оператор Call-центра' || msg.text == `Aloqa markazi operatori`) {
-          const users = await read('users.json')
-          const findUser = users?.find(e => e.id == msg.from.id)
+
+          const findUser = await JSON.parse( await client.get(`${ChatId}`))
+
        
           const dataLang = findUser?.lang
           const sentName = await   bot.sendMessage( ChatId ,
@@ -237,15 +245,17 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                         },
                       })
                       if(userStudent) {
-                        console.log(namee.text , date.text , nomer.text ,address.text );
-                        findUser.name = namee.text
-                        findUser.wasborn = date.text
-                        findUser.nomer = nomer.text
-                        findUser.address = address.text
-                        findUser.job = dataLang == 'uz' ? `Qo'ng'iroq markazi mutaxassisi` : 'Оператор Call-Центра'
-  
-                
-                        await write('users.json' , users)
+
+
+                         await client.setEx(`${ChatId}`,3000, JSON.stringify({
+                          ...findUser,
+                          name : namee.text,
+                          wasborn : date.text,
+                          nomer : nomer.text ,
+                          address : address.text,
+                          job : dataLang == 'uz' ? `Qo'ng'iroq markazi mutaxassisi` : 'Оператор Call-Центра'
+                        }))
+
                       }
                       
                     })
@@ -262,10 +272,12 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
       if(msg.reply_to_message?.text == `📌 Напишите про дополнительных навыков.` || msg.reply_to_message?.text == `📌 Qo’shimcha qobiliyatlaringiz haqida yozing.`){
 
-        const users = await read('users.json')
-        const findUser = await users.find(e => e.id == msg.from.id) 
-        findUser.skills = msg.text  
-        await write('users.json' ,users)
+        const findUser = await JSON.parse( await client.get(`${ChatId}`))
+     
+        await client.setEx(`${ChatId}`,3000, JSON.stringify({
+          ...findUser,
+          skills : msg.text
+        }))
 
       bot.sendMessage(msg?.from?.id , `
       ${findUser.lang == 'uz' ? `<b>Ma'lumotlaringizni oldindan ko'rish:</b>` : '<b> Предварительный просмотр ваших данных: </b>'}
@@ -297,13 +309,16 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
     })
 
   bot.on('callback_query' , async mesage_Callback => {
-
+      const ChatId = mesage_Callback.from.id
     if(mesage_Callback.data.split('::')[0] == 'student'){
-      const users = await read('users.json')
-      const findUser = users.find(e => e.id ==mesage_Callback.from.id)
-      findUser.student =  mesage_Callback.data.split('::')[1]
-    
-      await write('users.json' , users)
+
+      const findUser =await JSON.parse( await client.get(`${ChatId}`))
+     
+      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        ...findUser,
+       student :  mesage_Callback.data.split('::')[1]
+      }))
+
 
 
       await bot.sendMessage(mesage_Callback.message.chat.id,
@@ -338,11 +353,13 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
     }
 
     if(mesage_Callback.data.split('::')[0] == 'lang_uz'){
-      const users = await read('users.json')
-      const findUser = users.find(e => e.id ==mesage_Callback.from.id)
-      findUser.lang_uz =  mesage_Callback.data?.split('::')[1]
 
-      await write('users.json' , users)
+      const findUser = await JSON.parse( await client.get(`${ChatId}`))
+     
+      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        ...findUser,
+        lang_uz :  mesage_Callback.data.split('::')[1]
+      }))
 
       await bot.sendMessage(mesage_Callback.message.chat.id,
         findUser.lang == 'uz' ? `🇷🇺 Rus tilini bilish darajangiz qanday?` :  '🇷🇺 Какой у вас уровень русского языка?', {
@@ -377,11 +394,14 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
     }
 
     if(mesage_Callback.data.split('::')[0] == 'lang_ru'){
-      const users = await read('users.json')
-      const findUser = users.find(e => e.id == mesage_Callback.from.id)
-      findUser.lang_ru =   mesage_Callback?.data?.split('::')[1]
 
-      await write('users.json' , users)
+
+      const findUser = await JSON.parse( await client.get(`${ChatId}`))
+     
+      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        ...findUser,
+        lang_ru :  mesage_Callback.data.split('::')[1]
+      }))
 
       await bot.sendMessage(mesage_Callback.message.chat.id,
         findUser.lang == 'uz' ? `🇺🇸 Ingliz tilini bilish darajangiz qanday?` : '🇺🇸 Какой у вас уровень англиский языка?', {
@@ -415,11 +435,14 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
     }
 
     if(mesage_Callback.data.split('::')[0] == 'lang_en'){
-      const users = await read('users.json')
-      const findUser = users.find(e => e.id ==mesage_Callback.from.id)
-      findUser.lang_en =  mesage_Callback?.data?.split('::')[1]
 
-      await write('users.json' , users)
+
+      const findUser = await JSON.parse( await client.get(`${ChatId}`))
+     
+      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        ...findUser,
+        lang_en :  mesage_Callback.data.split('::')[1]
+      }))
 
       await bot.sendMessage(mesage_Callback.message.chat.id,
         findUser.lang == 'uz' ? `💻 Kompyuterni bilish darajangiz qanday?` :  '💻 Какой у вас уровень знания компьютера?', {
@@ -453,11 +476,13 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
 
     if(mesage_Callback.data.split('::')[0] == 'comp'){
-      const users = await read('users.json')
-      const findUser = users.find(e => e.id == mesage_Callback.from.id)
-      findUser.comp =  mesage_Callback?.data?.split('::')[1]
 
-      await write('users.json' , users)
+      const findUser = await JSON.parse( await client.get(`${ChatId}`))
+     
+      await client.setEx(`${ChatId}`,3000, JSON.stringify({
+        ...findUser,
+        comp :  mesage_Callback.data.split('::')[1]
+      }))
 
       bot.sendMessage(mesage_Callback.message.chat.id , findUser.lang == 'uz' ? `📌 Qo’shimcha qobiliyatlaringiz haqida yozing.`: `📌 Напишите про дополнительных навыков.`, {
         reply_markup :{

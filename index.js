@@ -59,17 +59,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
     bot.on('message' , async msg => {
       const ChatId = msg.chat.id 
-      console.log(msg);
       
-    // const link = bot.getFileLink(msg?.photo[3].file_id)
-    //   // bot.getFileLink()
-    //   console.log(link)
-
-  //   if (msg.photo && msg.photo[0]) {
-  //     const image = await bot.getFileLink( msg.photo[3].file_id);
-  //     console.log(image);
-
-  // }
 
       if(msg.text == '🇷🇺  Русский' ) {
         const findUser =await JSON.parse( await client.get(`${ChatId}`))

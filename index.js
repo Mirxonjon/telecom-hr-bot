@@ -326,7 +326,8 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
   bot.on('callback_query' , async mesage_Callback => {
       const ChatId = mesage_Callback.from.id
-    if(mesage_Callback.data.split('::')[0] == 'student'){
+      const  msg_call =  mesage_Callback.data.split('::')[0]
+    if(msg_call == 'student'){
 
       const findUser =await JSON.parse( await client.get(`${ChatId}`))
      
@@ -368,7 +369,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
       })
     }
 
-    if(mesage_Callback.data.split('::')[0] == 'lang_uz'){
+    if(msg_call == 'lang_uz'){
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
@@ -409,7 +410,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
     }
 
-    if(mesage_Callback.data.split('::')[0] == 'lang_ru'){
+    if(msg_call == 'lang_ru'){
 
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
@@ -450,7 +451,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
 
     }
 
-    if(mesage_Callback.data.split('::')[0] == 'lang_en'){
+    if(msg_call == 'lang_en'){
 
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
@@ -491,7 +492,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
     }
 
 
-    if(mesage_Callback.data.split('::')[0] == 'comp'){
+    if(msg_call == 'comp'){
 
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
@@ -533,8 +534,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
       
     }
 
-    if(mesage_Callback.data.split('::')[0] == 'experience'){
-       mesage_Callback.data.split('::')[1]
+    if(msg_call == 'experience'){
       const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
       await client.set(`${ChatId}`, JSON.stringify({
@@ -542,7 +542,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         experience : mesage_Callback.data.split('::')[1]
       }))
       
-        await bot.sendMessage(mesage_Callback.message.chat.id, 
+        await bot.sendMessage(ChatId , 
           findUser.lang == 'uz' ? `🤵/🤵‍♀️ Suratingizni yuboring (telefoningizda selfi olishingiz mumkin)` : '🤵/🤵‍♀️ Отправьте Ваше фото (можно селфи с телефона)',{
             reply_markup:{
               force_reply: true

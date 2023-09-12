@@ -59,7 +59,17 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 
     bot.on('message' , async msg => {
       const ChatId = msg.chat.id 
-      console.log(ChatId);
+      console.log(msg);
+      
+    // const link = bot.getFileLink(msg?.photo[3].file_id)
+    //   // bot.getFileLink()
+    //   console.log(link)
+
+  //   if (msg.photo && msg.photo[0]) {
+  //     const image = await bot.getFileLink( msg.photo[3].file_id);
+  //     console.log(image);
+
+  // }
 
       if(msg.text == '🇷🇺  Русский' ) {
         const findUser =await JSON.parse( await client.get(`${ChatId}`))
@@ -156,7 +166,8 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
               "lang_uz": findUser?.lang_uz,
               "lang_en": findUser?.lang_en,
               "comp" : findUser?.comp,
-              "skills" : findUser?.skills
+              "image" : findUser.image ,
+              "experience" : findUser?.experience
           }),
         }).then(res => {
           if( res.status == 201) {
@@ -210,15 +221,26 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                 })
 
                 bot.onReplyToMessage(userDate.chat.id , userDate.message_id , async date => {
-     
-                  const userNomer =  await bot.sendMessage(namee.chat.id,
-                    dataLang == 'uz' ?`📱 Telefon raqamingizni kiriting (masalan: +998XXXXXXXXX)` : '📱 Укажите Ваш контактный номер телефона (пример: +998XXXXXXXXX)', {
+
+                  const sentPhoto = await bot.sendMessage(namee.chat.id, 
+                    dataLang == 'uz' ? `🤵/🤵‍♀️ Suratingizni yuboring (telefoningizda selfi olishingiz mumkin)` : '🤵/🤵‍♀️ Отправьте Ваше фото (можно селфи с телефона)',{
+                      reply_markup:{
+                        force_reply: true
+                      }
+                    }
+                    )
+                    bot.onReplyToMessage(sentPhoto.chat.id , sentPhoto.message_id , async photo => {
+                        
+                      const  photoLink = await bot.getFileLink(photo.photo[3].file_id)
+                    const userNomer =  await bot.sendMessage(date.chat.id,
+                      dataLang == 'uz' ?`📱 Telefon raqamingizni kiriting (masalan: +998XXXXXXXXX)` : '📱 Укажите Ваш контактный номер телефона (пример: +998XXXXXXXXX)', {
                         reply_markup: {
                           force_reply: true,
                         },
                       })
                     
                   bot.onReplyToMessage(userNomer.chat.id , userNomer.message_id , async nomer => {
+
                     const addressUser = await bot.sendMessage(nomer.chat.id ,
                       dataLang == 'uz' ?`🏠 Yashash manzili (shahar, tuman, ko'cha/blok)` : '🏠 Адрес проживания (пример: город, район, улица/квартал)' , {
                         reply_markup :{
@@ -253,6 +275,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                           name : namee.text,
                           wasborn : date.text,
                           nomer : nomer.text ,
+                          image : photoLink,
                           address : address.text,
                           job : dataLang == 'uz' ? `Qo'ng'iroq markazi mutaxassisi` : 'Оператор Call-Центра'
                         }))
@@ -261,9 +284,8 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                       
                     })
                       
-
                   } )
-
+                  })
 
                   
                 })
@@ -271,41 +293,41 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
               })
       } 
 
-      if(msg.reply_to_message?.text == `📌 Напишите про дополнительных навыков.` || msg.reply_to_message?.text == `📌 Qo’shimcha qobiliyatlaringiz haqida yozing.`){
+//       if(msg.reply_to_message?.text == `📌 Напишите про дополнительных навыков.` || msg.reply_to_message?.text == `📌 Qo’shimcha qobiliyatlaringiz haqida yozing.`){
 
-        const findUser = await JSON.parse( await client.get(`${ChatId}`))
+//         const findUser = await JSON.parse( await client.get(`${ChatId}`))
      
-        await client.set(`${ChatId}`, JSON.stringify({
-          ...findUser,
-          skills : msg.text
-        }))
+//         await client.set(`${ChatId}`, JSON.stringify({
+//           ...findUser,
+//           skills : msg.text
+//         }))
 
-      bot.sendMessage(msg?.from?.id , `
-      ${findUser.lang == 'uz' ? `<b>Ma'lumotlaringizni oldindan ko'rish:</b>` : '<b> Предварительный просмотр ваших данных: </b>'}
+//       bot.sendMessage(msg?.from?.id , `
+//       ${findUser.lang == 'uz' ? `<b>Ma'lumotlaringizni oldindan ko'rish:</b>` : '<b> Предварительный просмотр ваших данных: </b>'}
       
- ${findUser.lang == 'uz' ? '<b>💼 Vakansiya nomi:</b>': '<b>💼 Название вакансии:</b>' } ${findUser.job}
- ${findUser.lang == 'uz' ? '<b>📄 F.I.Sh:</b>': '<b>📄 Ф.И.О:</b>' } ${findUser.name}
- ${findUser.lang == 'uz' ? '<b>📅 Tug\'ilgan sana:</b>': '<b> 📅 Дата рождения:</b>' } ${findUser.wasborn}
- ${findUser.lang == 'uz' ? '<b>📱 Aloqa:</b>': '<b> 📱Контакт:</b>' } ${findUser.nomer}
- ${findUser.lang == 'uz' ? '<b>📍 Manzil:</b>': '<b>📍 Адресс:</b>' } ${findUser.address}
- ${findUser.lang == 'uz' ? '<b>🎓 Talabamisiz?: </b>': '<b>🎓 Вы студент?:</b>' } ${findUser.student}
- ${findUser.lang == 'uz' ? '<b>🇺🇿 O\'zbek tili darajasi:</b>': '<b>🇺🇿 Уровень узбекского языка:</b>' } ${findUser.lang_uz}
- ${findUser.lang == 'uz' ? '<b>🇷🇺 Rus tilini bilish darajasi:</b>': '<b>🇷🇺 Уровень русского языка:</b>' } ${findUser.lang_ru}
- ${findUser.lang == 'uz' ? '<b>🇺🇸 Ingliz tilini bilish darajasi:</b>': '<b>🇺🇸 Уровень англиского языка:</b>' } ${findUser.lang_en}
- ${findUser.lang == 'uz' ? '<b>💻 Kompyuterni bilish darajasi:</b>': '<b>💻Уровень знания компьютера:</b>' } ${findUser.comp}
- ${findUser.lang == 'uz' ? '<b>📌 Qo’shimcha qobiliyatlar:</b>': '<b>📌 Дополнительные навыки:</b>' } ${msg.text}
+//  ${findUser.lang == 'uz' ? '<b>💼 Vakansiya nomi:</b>': '<b>💼 Название вакансии:</b>' } ${findUser.job}
+//  ${findUser.lang == 'uz' ? '<b>📄 F.I.Sh:</b>': '<b>📄 Ф.И.О:</b>' } ${findUser.name}
+//  ${findUser.lang == 'uz' ? '<b>📅 Tug\'ilgan sana:</b>': '<b> 📅 Дата рождения:</b>' } ${findUser.wasborn}
+//  ${findUser.lang == 'uz' ? '<b>📱 Aloqa:</b>': '<b> 📱Контакт:</b>' } ${findUser.nomer}
+//  ${findUser.lang == 'uz' ? '<b>📍 Manzil:</b>': '<b>📍 Адресс:</b>' } ${findUser.address}
+//  ${findUser.lang == 'uz' ? '<b>🎓 Talabamisiz?: </b>': '<b>🎓 Вы студент?:</b>' } ${findUser.student}
+//  ${findUser.lang == 'uz' ? '<b>🇺🇿 O\'zbek tili darajasi:</b>': '<b>🇺🇿 Уровень узбекского языка:</b>' } ${findUser.lang_uz}
+//  ${findUser.lang == 'uz' ? '<b>🇷🇺 Rus tilini bilish darajasi:</b>': '<b>🇷🇺 Уровень русского языка:</b>' } ${findUser.lang_ru}
+//  ${findUser.lang == 'uz' ? '<b>🇺🇸 Ingliz tilini bilish darajasi:</b>': '<b>🇺🇸 Уровень англиского языка:</b>' } ${findUser.lang_en}
+//  ${findUser.lang == 'uz' ? '<b>💻 Kompyuterni bilish darajasi:</b>': '<b>💻Уровень знания компьютера:</b>' } ${findUser.comp}
+//  ${findUser.lang == 'uz' ? '<b>📌 Qo’shimcha qobiliyatlar:</b>': '<b>📌 Дополнительные навыки:</b>' } ${msg.text}
 
-${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</b> tugmasini bosing`  : `Нажмите кнопку <b>"Отправить"</b>, чтобы подтвердить все данные` }
-      `,{parse_mode : 'HTML',
-        reply_markup : {
-          keyboard : [[findUser.lang == 'uz' ? 'Yuborish' : 'Отправить']],
-          one_time_keyboard :true,
-          resize_keyboard:true
-        }
-      }
-      )
+// ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</b> tugmasini bosing`  : `Нажмите кнопку <b>"Отправить"</b>, чтобы подтвердить все данные` }
+//       `,{parse_mode : 'HTML',
+//         reply_markup : {
+//           keyboard : [[findUser.lang == 'uz' ? 'Yuborish' : 'Отправить']],
+//           one_time_keyboard :true,
+//           resize_keyboard:true
+//         }
+//       }
+//       )
 
-      }
+//       }
     
     })
 
@@ -327,21 +349,21 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         reply_markup:  {
           inline_keyboard: [
             [{
-                text:  "Начальный",
+                text:  "1: Начальный",
                 callback_data: `lang_uz::Начальный`
               },
               {
-                text: "Средний",
+                text: "2: Средний",
                 callback_data: `lang_uz::Средний`
               },
             ],
             [
               {
-                text: "Продвинутый",
+                text: "3: Продвинутый",
                 callback_data: `lang_uz::Продвинутый`
               },
               {
-                text: "Свободный",
+                text: "4: Свободный",
                 callback_data: `lang_uz::Свободный`
               }
             ]
@@ -367,21 +389,21 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         reply_markup:  {
           inline_keyboard: [
             [{
-                text: "Начальный",
+                text: "1: Начальный",
                 callback_data: `lang_ru::Начальный`
               },
               {
-                text: "Средний",
+                text: "2: Средний",
                 callback_data: `lang_ru::Средний`
               },
             ],
             [
               {
-                text: "Продвинутый",
+                text: "3: Продвинутый",
                 callback_data: `lang_ru::Продвинутый`
               },
               {
-                text: "Свободный",
+                text: "4: Свободный",
                 callback_data: `lang_ru::Свободный`
               }
             ]
@@ -409,21 +431,21 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         reply_markup:  {
           inline_keyboard: [
             [{
-                text: "Начальный",
+                text: "1: Начальный",
                 callback_data: `lang_en::Начальный`
               },
               {
-                text: "Средний",
+                text: "2: Средний",
                 callback_data: `lang_en::Средний`
               },
             ],
             [
               {
-                text: "Продвинутый",
+                text: "3: Продвинутый",
                 callback_data: `lang_en::Продвинутый`
               },
               {
-                text: "Свободный",
+                text: "4: Свободный",
                 callback_data: `lang_en::Свободный`
               }
             ]
@@ -450,21 +472,21 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         reply_markup:  {
           inline_keyboard: [
             [{
-                text: "Начальный",
+                text: "1: Начальный",
                 callback_data: `comp::Начальный`
               },
               {
-                text: "Средний",
+                text: "2: Средний",
                 callback_data: `comp::Средний`
               },
             ],
             [
               {
-                text: "Продвинутый",
+                text: "3: Продвинутый",
                 callback_data: `comp::Продвинутый`
               },
               {
-                text: "Свободный",
+                text: "4: Свободный",
                 callback_data: `comp::Свободный`
               }
             ]
@@ -485,12 +507,72 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         comp :  mesage_Callback.data.split('::')[1]
       }))
 
-      bot.sendMessage(mesage_Callback.message.chat.id , findUser.lang == 'uz' ? `📌 Qo’shimcha qobiliyatlaringiz haqida yozing.`: `📌 Напишите про дополнительных навыков.`, {
-        reply_markup :{
-          force_reply : true
-        }
-      } )
 
+      await bot.sendMessage(mesage_Callback.message.chat.id,
+        findUser.lang == 'uz' ? `💼 Sizning ish tajribangiz qanday?` :  '💼 Ваш опыт работы?', {
+        reply_markup:  {
+          inline_keyboard: [
+            [{
+                text: "0-6месяцев",
+                callback_data: `experience::0-6месяцев`
+              },
+              {
+                text: "6месяцев - 1год",
+                callback_data: `experience::6месяцев - 1год`
+              },
+            ],
+            [
+              {
+                text: "1год - 2год",
+                callback_data: `experience::1год - 2год`
+              },
+              {
+                text: "2год+",
+                callback_data: `experience::2год+`
+              }
+            ]
+          ],
+          one_time_keyboard: true,
+          
+        },
+      })
+
+      
+    }
+
+    if(mesage_Callback.data.split('::')[0] == 'experience'){
+      const experience =  mesage_Callback.data.split('::')[1]
+      const findUser = await JSON.parse( await client.get(`${ChatId}`))
+     
+      await client.set(`${ChatId}`, JSON.stringify({
+        ...findUser,
+        experience : experience
+      }))
+
+    await bot.sendMessage(mesage_Callback.message.chat.id , `
+    ${findUser.lang == 'uz' ? `<b>Ma'lumotlaringizni oldindan ko'rish:</b>` : '<b> Предварительный просмотр ваших данных: </b>'}
+    
+${findUser.lang == 'uz' ? '<b>💼 Vakansiya nomi:</b>': '<b>💼 Название вакансии:</b>' } ${findUser.job}
+${findUser.lang == 'uz' ? '<b>📄 F.I.Sh:</b>': '<b>📄 Ф.И.О:</b>' } ${findUser.name}
+${findUser.lang == 'uz' ? '<b>📅 Tug\'ilgan sana:</b>': '<b> 📅 Дата рождения:</b>' } ${findUser.wasborn}
+${findUser.lang == 'uz' ? '<b>📱 Aloqa:</b>': '<b> 📱Контакт:</b>' } ${findUser.nomer}
+${findUser.lang == 'uz' ? '<b>📍 Manzil:</b>': '<b>📍 Адресс:</b>' } ${findUser.address}
+${findUser.lang == 'uz' ? '<b>🎓 Talabamisiz?: </b>': '<b>🎓 Вы студент?:</b>' } ${findUser.student}
+${findUser.lang == 'uz' ? '<b>🇺🇿 O\'zbek tili darajasi:</b>': '<b>🇺🇿 Уровень узбекского языка:</b>' } ${findUser.lang_uz}
+${findUser.lang == 'uz' ? '<b>🇷🇺 Rus tilini bilish darajasi:</b>': '<b>🇷🇺 Уровень русского языка:</b>' } ${findUser.lang_ru}
+${findUser.lang == 'uz' ? '<b>🇺🇸 Ingliz tilini bilish darajasi:</b>': '<b>🇺🇸 Уровень англиского языка:</b>' } ${findUser.lang_en}
+${findUser.lang == 'uz' ? '<b>💻 Kompyuterni bilish darajasi:</b>': '<b>💻Уровень знания компьютера:</b>' } ${findUser.comp}
+${findUser.lang == 'uz' ? '<b>💼 Ish tajribangiz: </b>': '<b>💼 Опыт работы: </b>' } ${experience}
+
+${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</b> tugmasini bosing`  : `Нажмите кнопку <b>"Отправить"</b>, чтобы подтвердить все данные` }
+    `,{parse_mode : 'HTML',
+      reply_markup : {
+        keyboard : [[findUser.lang == 'uz' ? 'Yuborish' : 'Отправить']],
+        one_time_keyboard :true,
+        resize_keyboard:true
+      }
+    }
+    )
     }
     
   })

@@ -42,9 +42,8 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
 ✅ Надбавки;
 ✅ Дружелюбный коллектив;
 ✅ Карьерный рост;
-📍 Адрес: г.Ташкент, Мирабадский р-он, ул.Нукус 87. Ориентир
-посольства России;
-      `
+📍 Адрес: <a href="https://yandex.uz/maps/10335/tashkent/house/YkAYdAFoTkMPQFprfX55dHxmYQ==/?ll=69.268479%2C41.284929&z=19"> г.Ташкент, Мирабадский р-он, ул.Нукус 87. Ориентир
+посольства России</a>;`
     }  ,
      )
 
@@ -161,7 +160,12 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
           }),
         }).then(res => {
           if( res.status == 201) {
-            bot.sendMessage(msg.chat.id ,findUser.lang == 'uz' ? `Kompaniyamizga bo'lgan qiziqishingiz uchun tashakkur, siz anketangizni muvaffaqiyatli to'ldirdingiz ✅` : `Благодарим за проявленный интерес нашей компании, Вы успешно заполнили свою анкету ✅` ,{
+            bot.sendMessage(msg.chat.id ,findUser.lang == 'uz' ? `Kompaniyamizga bildirgan qiziqishingiz uchun tashakkur. Sizga shuni ma’lum qilamizki, ushbu lavozimga arizangiz muvaffaqiyatli qabul qilindi va ko‘rib chiqish jarayonida. ✅
+
+Agar bizning talablarimizga javob bersangiz, Siz bilan suhbat yoki qo‘shimcha ma’lumot olish uchun bog‘lanamiz.` : `
+Спасибо за проявленный интерес к нашей компании. Мы хотим сообщить вам, что ваша заявка на вакансию успешно получена и находится в стадии рассмотрения. ✅
+
+Если ваш профиль соответствует нашим ожиданиям, мы свяжемся с вами для проведения собеседования или для дополнительной информации.` ,{
             reply_markup : {
               keyboard:  findUser.lang == 'uz' ? [[`Aloqa markazi operatori` ,'🇷🇺/🇺🇿 Tilni o\'zgartirish']] :[ ['Оператор Call-центра' ,'🇷🇺/🇺🇿 Tilni o\'zgartirish'] ],
               resize_keyboard: true ,
@@ -210,18 +214,9 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                   }
                 })
 
-                // bot.onReplyToMessage(userDate.chat.id , userDate.message_id , async date => {
-
-                  // const sentPhoto = await bot.sendMessage(namee.chat.id, 
-                  //   dataLang == 'uz' ? `🤵/🤵‍♀️ Suratingizni yuboring (telefoningizda selfi olishingiz mumkin)` : '🤵/🤵‍♀️ Отправьте Ваше фото (можно селфи с телефона)',{
-                  //     reply_markup:{
-                  //       force_reply: true
-                  //     }
-                  //   }
-                  //   )
+              
                     bot.onReplyToMessage(userDate.chat.id , userDate.message_id , async date => {
                         
-                      // const  photoLink = await bot.getFileLink(photo.photo[3].file_id)
                     const userNomer =  await bot.sendMessage(date.chat.id,
                       dataLang == 'uz' ?`📱 Telefon raqamingizni kiriting (masalan: +998XXXXXXXXX)` : '📱 Укажите Ваш контактный номер телефона (пример: +998XXXXXXXXX)', {
                         reply_markup: {
@@ -277,7 +272,6 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
                   })
 
                   
-                // })
 
               })
       } 
@@ -507,22 +501,22 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         reply_markup:  {
           inline_keyboard: [
             [{
-                text: "0-6месяцев",
-                callback_data: `experience::0-6месяцев`
+                text: "0-6мес",
+                callback_data: `experience::0-6мес`
               },
               {
-                text: "6месяцев - 1год",
-                callback_data: `experience::6месяцев - 1год`
+                text: "6мес-1год",
+                callback_data: `experience::6мес-1год`
               },
             ],
             [
               {
-                text: "1год - 2год",
-                callback_data: `experience::1год - 2год`
+                text: "1год-3год",
+                callback_data: `experience::1год-3год`
               },
               {
-                text: "2год+",
-                callback_data: `experience::2год+`
+                text: "3год+",
+                callback_data: `experience::3год+`
               }
             ]
           ],
@@ -542,8 +536,8 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
         experience : mesage_Callback.data.split('::')[1]
       }))
       
-        await bot.sendMessage(ChatId , 
-          findUser.lang == 'uz' ? `🤵/🤵‍♀️ Suratingizni yuboring (telefoningizda selfi olishingiz mumkin)` : '🤵/🤵‍♀️ Отправьте Ваше фото (можно селфи с телефона)',{
+        bot.sendMessage(ChatId , 
+          findUser.lang == 'uz' ? '🤵/🤵‍♀️ Suratingizni yuboring (telefoningizda selfi olishingiz mumkin)' : '🤵/🤵‍♀️ Отправьте Ваше фото (можно селфи с телефона)',{
             reply_markup:{
               force_reply: true
             }
@@ -553,6 +547,8 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
     }
     
   })
+
+  
   
 } catch (error) {
   console.log(error);

@@ -280,7 +280,8 @@ Agar bizning talablarimizga javob bersangiz, Siz bilan suhbat yoki qo‘shimcha 
 
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
            if (msg.photo && msg.photo[0]) {
-              const photoLink = await bot.getFileLink( msg.photo[3].file_id);
+            console.log(msg.photo);
+              const photoLink = await bot.getFileLink( msg.photo[3].file_id ? msg.photo[3].file_id : msg.photo[2].file_id ? msg.photo[2].file_id : msg.photo[1].file_id ? msg.photo[1].file_id : msg.photo[0].file_id  );
               
         await client.set(`${ChatId}`, JSON.stringify({
           ...findUser,

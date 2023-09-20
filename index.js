@@ -147,7 +147,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
         const loadMessage = await bot.sendMessage(ChatId, 'Loading .') 
         
-        const browser = await puppeteer.launch({ headless: 'new' });
+        const browser = await puppeteer.launch({ headless: 'new' ,executablePath:'/usr/bin/google-chrome' });
         const page = await browser.newPage();
         await page.setContent(createPdf(findUser.image,findUser.name , findUser.nomer , findUser.wasborn , findUser.student , findUser.lang_uz, findUser.lang_ru, findUser.lang_en , findUser.comp ,findUser.address ,findUser.experience ));
         const pdf =  await page.pdf({  format: 'A4'  });

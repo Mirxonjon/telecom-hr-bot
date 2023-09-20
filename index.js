@@ -2,6 +2,10 @@ import TelegramBot from 'node-telegram-bot-api';
 import fetch from 'node-fetch'
 import * as dotenv from 'dotenv'
 import { fetchRedis } from './utils/redis.js';
+import createPdf from './utils/pdfExample.js'; 
+
+import puppeteer from 'puppeteer';
+
 
 dotenv.config()
 const token = process.env.BOT_TOKEN 
@@ -140,8 +144,18 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
 
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
+        const loadMessage = await bot.sendMessage(ChatId, 'Loading .') 
         
-         await fetch('https://api.ccenter.uz/api/v1/users/create' ,{
+        const browser = await puppeteer.launch({ headless: 'new' });
+        const page = await browser.newPage();
+        await page.setContent(createPdf(findUser.image,findUser.name , findUser.nomer , findUser.wasborn , findUser.student , findUser.lang_uz, findUser.lang_ru, findUser.lang_en , findUser.comp ,findUser.address ,findUser.experience ));
+        const pdf =  await page.pdf({  format: 'A4'  });
+        await browser.close();
+        await bot.editMessageText('Loading ..' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
+        const rezsume =  await bot.sendDocument(ChatId ,pdf ,{},{filename : `${findUser.name}` })
+        const resume =   await  bot.getFileLink( rezsume.document.file_id) 
+        await bot.editMessageText('Loading ...' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
+         await fetch('http://127.0.0.1:2004/api/v1/users/create' ,{
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,
           body: JSON.stringify({
@@ -156,10 +170,13 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
               "lang_en": findUser?.lang_en,
               "comp" : findUser?.comp,
               "image" : findUser.image ,
-              "experience" : findUser?.experience
+              "experience" : findUser?.experience,
+              "resume" : resume
           }),
         }).then(res => {
           if( res.status == 201) {
+
+            bot.deleteMessage(ChatId ,loadMessage.message_id)
             bot.sendMessage(msg.chat.id ,findUser.lang == 'uz' ? `Kompaniyamizga bildirgan qiziqishingiz uchun tashakkur. Sizga shuni ma’lum qilamizki, ushbu lavozimga arizangiz muvaffaqiyatli qabul qilindi va ko‘rib chiqish jarayonida. ✅
 
 Agar bizning talablarimizga javob bersangiz, Siz bilan suhbat yoki qo‘shimcha ma’lumot olish uchun bog‘lanamiz.` : `
@@ -279,9 +296,8 @@ Agar bizning talablarimizga javob bersangiz, Siz bilan suhbat yoki qo‘shimcha 
       if(msg.reply_to_message?.text == `🤵/🤵‍♀️ Suratingizni yuboring (telefoningizda selfi olishingiz mumkin)` || msg.reply_to_message?.text == '🤵/🤵‍♀️ Отправьте Ваше фото (можно селфи с телефона)'){
 
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
-           if (msg.photo && msg.photo[0]) {
-            console.log(msg.photo);
-              const photoLink = await bot.getFileLink( msg.photo[3].file_id ? msg.photo[3].file_id : msg.photo[2].file_id ? msg.photo[2].file_id : msg.photo[1].file_id ? msg.photo[1].file_id : msg.photo[0].file_id  );
+           if (msg.photo && msg.photo[3]) {
+             const photoLink =   await  bot.getFileLink( msg.photo[3].file_id) 
               
         await client.set(`${ChatId}`, JSON.stringify({
           ...findUser,
@@ -313,6 +329,17 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
       }
     }
     )
+  }else {
+
+    await bot.sendMessage(ChatId , findUser.lang == 'uz' ? 'Rasm sifati past yoki noto\'g\'ri formatda yukladingiz' : 'Вы отправили фотографию низкого качество или не правильный формат файла.')
+
+    await bot.sendMessage(ChatId , 
+      findUser.lang == 'uz' ? '🤵/🤵‍♀️ Suratingizni yuboring (telefoningizda selfi olishingiz mumkin)' : '🤵/🤵‍♀️ Отправьте Ваше фото (можно селфи с телефона)',{
+        reply_markup:{
+          force_reply: true
+        }
+      }
+      )
   }
 
       }

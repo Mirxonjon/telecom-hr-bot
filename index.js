@@ -10,6 +10,8 @@ import puppeteer from 'puppeteer';
 dotenv.config()
 const token = process.env.BOT_TOKEN 
 try {
+  process.env["NTBA_FIX_350"] = 1;
+
 const client = await fetchRedis()
 
 const bot  = new TelegramBot(token, {
@@ -142,7 +144,6 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     } 
     
     if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
-
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
         const loadMessage = await bot.sendMessage(ChatId, 'Loading .') 
         
@@ -152,7 +153,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
         const pdf =  await page.pdf({  format: 'A4'  });
         await browser.close();
         await bot.editMessageText('Loading ..' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
-        const rezsume =  await bot.sendDocument(ChatId ,pdf ,{},{filename : `${findUser.name}` })
+        const rezsume =  await bot.sendDocument(ChatId ,pdf ,{caption:'anketa'},{filename : `${findUser.name}.pdf` ,contentType:'image/jpeg'})
         const resume =   await  bot.getFileLink( rezsume.document.file_id) 
         await bot.editMessageText('Loading ...' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
          await fetch('https://api.ccenter.uz/api/v1/users/create' ,{

@@ -145,17 +145,17 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
     
     if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
-        const loadMessage = await bot.sendMessage(ChatId, 'Loading .') 
+        const loadMessage = await bot.sendMessage(ChatId,findUser.lang == 'uz' ?'Rezyume tayyorlanyapti .' : 'Генерируется резюме .') 
         
-        const browser = await puppeteer.launch({ headless: 'new' ,executablePath:'/usr/bin/google-chrome' });
+        const browser = await puppeteer.launch({ headless: 'new' ,executablePath:'/usr/bin/google-chrome',args: ['--no-sandbox'] } );
         const page = await browser.newPage();
         await page.setContent(createPdf(findUser.image,findUser.name , findUser.nomer , findUser.wasborn , findUser.student , findUser.lang_uz, findUser.lang_ru, findUser.lang_en , findUser.comp ,findUser.address ,findUser.experience ));
         const pdf =  await page.pdf({  format: 'A4'  });
         await browser.close();
-        await bot.editMessageText('Loading ..' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
-        const rezsume =  await bot.sendDocument(ChatId ,pdf ,{caption:'anketa'},{filename : `${findUser.name}.pdf` ,contentType:'image/jpeg'})
+        await bot.editMessageText(findUser.lang == 'uz' ?'Rezyume tayyorlanyapti ..' : 'Генерируется резюме ..',{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
+        const rezsume =  await bot.sendDocument(ChatId ,pdf ,{},{filename : `${findUser.name}.pdf` ,contentType:'image/jpeg'})
         const resume =   await  bot.getFileLink( rezsume.document.file_id) 
-        await bot.editMessageText('Loading ...' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
+        await bot.editMessageText(findUser.lang == 'uz' ?'Rezyume tayyorlanyapti ...' : 'Генерируется резюме ...' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
          await fetch('https://api.ccenter.uz/api/v1/users/create' ,{
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,
@@ -206,8 +206,6 @@ Agar bizning talablarimizga javob bersangiz, Siz bilan suhbat yoki qo‘shimcha 
           } )
       }
     })
-    
-    
       bot.on('message' , async msg =>  {
         const ChatId = msg.chat.id 
         if(msg.text == 'Оператор Call-центра' || msg.text == `Aloqa markazi operatori`) {

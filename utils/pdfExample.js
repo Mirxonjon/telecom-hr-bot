@@ -27,7 +27,6 @@ body {
 }
 
 .main {
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
   display: block;
   margin: 0 auto;
   border-radius: 5px;
@@ -40,7 +39,6 @@ body {
   align-items: center;
   padding: 50px;
   border-radius: 5px 5px 0 0;
-  background-color: #F8F7F3;
 }
 
 .top-content img {

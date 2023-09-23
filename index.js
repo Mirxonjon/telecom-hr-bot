@@ -142,7 +142,6 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
       }
       }
     } 
-    
     if(msg.text == 'Отправить' || msg.text  ==   'Yuborish'){
         const findUser = await JSON.parse( await client.get(`${ChatId}`))
         const loadMessage = await bot.sendMessage(ChatId,findUser.lang == 'uz' ?'Rezyume tayyorlanyapti .' : 'Генерируется резюме .') 
@@ -344,10 +343,13 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
       }
     
     })
-
   bot.on('callback_query' , async mesage_Callback => {
       const ChatId = mesage_Callback.from.id
       const  msg_call =  mesage_Callback.data.split('::')[0]
+      bot.answerCallbackQuery(mesage_Callback.id, {
+        cache_time: 1.0,
+      }).then( async()=> {
+
     if(msg_call == 'student'){
 
       const findUser =await JSON.parse( await client.get(`${ChatId}`))
@@ -572,6 +574,7 @@ ${findUser.lang == 'uz' ? `Barcha tafsilotlarni tasdiqlash uchun <b>"Yuborish"</
           )
 
     }
+  })
     
   })
 

@@ -155,7 +155,7 @@ const url = 'https://marketing.uz/brend-goda-2021/uploads/works/covers/3367084b1
         const rezsume =  await bot.sendDocument(ChatId ,pdf ,{},{filename : `${findUser.name}.pdf` ,contentType:'image/jpeg'})
         const resume =   await  bot.getFileLink( rezsume.document.file_id) 
         await bot.editMessageText(findUser.lang == 'uz' ?'Rezyume tayyorlanyapti ...' : 'Генерируется резюме ...' ,{chat_id:loadMessage.chat.id,message_id: loadMessage.message_id})
-         await fetch('https://api.ccenter.uz/api/v1/users/create' ,{
+         await fetch('https://apihr.ccenter.uz/api/v1/users/create' ,{
           method :'POST',
           headers: { 'Content-Type': 'application/json' } ,
           body: JSON.stringify({
